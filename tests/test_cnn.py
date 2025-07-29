@@ -7,6 +7,7 @@ import os
 import json
 import numpy as np
 import torch
+from torch.hub import get_dir
 from PIL import Image
 import pytest
 from torchvision.transforms import transforms
@@ -48,10 +49,11 @@ def mocker_save_json(mocker):
 
 def test_import_defaults():
     """Ensure that MobileNet does not get downloaded on import"""
-    from torch.hub import get_dir
-    from pathlib import Path
 
     checkpoint_dir = Path(get_dir()) / "checkpoints"
+
+    # Ensure the directory exists
+    checkpoint_dir.mkdir(parents=True, exist_ok=True)
 
     # Clear cached MobileNet model
     for model_path in checkpoint_dir.iterdir():
@@ -64,10 +66,7 @@ def test_import_defaults():
     ]
 
     # Re-import cnn and assert model is not downloaded
-    import sys
-
-    del sys.modules["imagededup.methods.cnn"]
-    from imagededup.methods.cnn import CNN
+    from imagededup.methods import CNN
 
     assert not [
         m_path
