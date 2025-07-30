@@ -11,5 +11,5 @@ uv build --sdist
 
 # Wait for wheels to be built via GA
 # Move downloaded wheels to dist/
-# Test wheels locally, if successful: twine upload dist/*
+# twine upload dist/*
 
